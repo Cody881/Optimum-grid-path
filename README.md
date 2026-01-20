@@ -16,8 +16,10 @@ independent iteration.
 - The graph is represented as an unweighted grid
 - Individuals attempt to cover all edge pieces of the grid
 - Fitness is calculated mainly by the number of unique edges traveled and the number of overlaps
-- A basic selection algorithm is then applied after every generation, and then each individual is then mutated
+- A basic selection algorithm is then applied after every generation, and then each individual is mutated
 - Basic stats are tracked through every generation
+- 'manual.py' when run allows for manual traversal of the grid for experimentation purposes
+  
 
 ## Current Limitations
 - graphs are unweighted (edges have equal "costs")
