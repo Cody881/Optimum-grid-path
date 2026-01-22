@@ -18,7 +18,6 @@ independent iteration.
 - Fitness is calculated mainly by the number of unique edges traveled and the number of overlaps
 - A basic selection algorithm is then applied after every generation, and then each individual is mutated
 - Basic stats are tracked through every generation
-- 'manual.py' when run allows for manual traversal of the grid for experimentation purposes
   
 
 ## Current Limitations
@@ -30,3 +29,10 @@ independent iteration.
 - Extend graph representation to support weighted edges, and adapt the fitness function for this
 - Improve convergence speed and solution quality, probably through state awareness
 - Improve graphing of fitness statistics
+
+## Project structure
+- 'Genetic.py' is the core genetic algorithm logic
+- 'Individual.py' holds the class for all the logic and data each Individual needs
+- 'grid.py' has the class that deals with graph representation
+- 'plot.py' deals with the visualization of data from the genetic algorithm
+- 'manual.py' allows for entry and manual execution for experimentation
