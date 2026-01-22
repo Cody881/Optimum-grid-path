@@ -95,5 +95,10 @@ class grid:
         for point in self.vertices:
             point.color = [0, 0, 255]
     
+    #This is generally only used for manual operation
+    def print_stats(WIN):
+        pass
+
+    
                 
 

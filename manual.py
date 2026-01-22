@@ -3,6 +3,19 @@ from grid import grid
 from individuals import individual
 pygame.init()
 
+#This function is used to print stats on screen
+def print_stats():
+    text_surface = font.render("Press 'r' to reset grid", False, (0, 0, 0))
+    WIN.blit(text_surface, ((col + 1)*50, 70))
+    text_surface = font.render("Press 's' to set starting position on reset", False, (0, 0, 0))
+    WIN.blit(text_surface, ((col + 1)*50, 100))
+    text_surface = font.render(f"Overlaps: {overlaps}", False, (0, 0, 0))
+    WIN.blit(text_surface, ((col + 1)*50, 160))
+    text_surface = font.render(f"Steps taken: {steps_taken}", False, (0, 0, 0))
+    WIN.blit(text_surface, ((col + 1)*50, 190))
+    text_surface = font.render(f"Unique edges: {traveled_edges}", False, (0, 0, 0))
+    WIN.blit(text_surface, ((col + 1)*50, 220))
+
 #WIDTH and HEIGHT of screen + the colors we will need
 WIDTH, HEIGHT = 800, 600
 white = [255, 255, 255]
@@ -17,14 +30,17 @@ col = 5
 #creating grid object
 grid = grid(row, col)
 
-#This creates the display screen
+#This creates the display screen and sets font
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 WIN.fill(white)
+font = pygame.font.Font(None, 28)
+
 
 #creating the player
 #the player just uses one of the vertex objects and turns it green to indicate that the player is on that square
 #any changes to the player object are by association given to the given vertex object
 player = grid.vertices[0]
+starting_index = 0
 player_index = 0
 """
 indexing works in this order
@@ -34,6 +50,11 @@ indexing works in this order
 This is for a 3x3 but the same concept is for larger or smaller grids.
 """
 player.color = green
+
+#stat tracking
+overlaps = 0
+traveled_edges = 0
+steps_taken = 0
 
 #loop to keep the window open
 running = True
@@ -63,6 +84,7 @@ while running:
                 for line in grid.edges:
                     if line.crossed == 1:
                         line.crossed = 0
+                        line.color = [255, 0, 0]
             #handles LEFT press
             if event.key == pygame.K_LEFT:
                 if player_index - row > - 1:
@@ -71,7 +93,7 @@ while running:
                     player_index = new_index
                     player = grid.vertices[player_index]
                     player.color = green
-                    grid.steps_taken += 1
+                    steps_taken += 1
             #handles RIGHT press
             if event.key == pygame.K_RIGHT:
                 if player_index + row < len(grid.vertices):
@@ -80,7 +102,7 @@ while running:
                     player_index = new_index
                     player = grid.vertices[player_index]
                     player.color = green
-                    grid.steps_taken += 1
+                    steps_taken += 1
             #handles UP press
             if event.key == pygame.K_UP:
                 if player_index % row > 0:
@@ -89,7 +111,7 @@ while running:
                     player_index = new_index
                     player = grid.vertices[player_index]
                     player.color = green
-                    grid.steps_taken += 1
+                    steps_taken += 1
             #handles DOWN press
             if event.key == pygame.K_DOWN:
                 if player_index % row < row - 1:
@@ -100,21 +122,22 @@ while running:
                         player_index = new_index
                         player = grid.vertices[player_index]
                         player.color = green
-                        grid.steps_taken += 1
+                        steps_taken += 1
             next_vertex = (player.x + 5, player.y + 5)
             for line in player.edges:
                 if (line.from_vertex == prev_vertex and line.to_vertex == next_vertex or
                     line.from_vertex == next_vertex and line.to_vertex == prev_vertex):
                     if not line.crossed:
                         line.crossed = 1
-                        grid.traveled_edges += 1
+                        traveled_edges += 1
+                        line.color = [0, 255, 0]
                     else:
-                        grid.overlaps += 1
+                        overlaps += 1
                         break
 
     #drawing edges and vertices every frame
     grid.draw_grid(WIN)
-    grid.print_stats(WIN)
+    print_stats()
 
     player.draw_vertex(WIN)
     pygame.display.update()
